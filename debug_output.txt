@@ -1,0 +1,14 @@
+# INT. START
+
+if x > 1:
+
+""True""
+
+else:
+
+""False""
+
+"Done."
+
+--- LINES ---
+['# INT. START', 'if x > 1:', '""True""', 'else:', '""False""', '"Done."']

@@ -1,0 +1,95 @@
+:: Buddies Limit options [mod_options]
+{
+(_setting_button:
+        "$BL_option",
+        (a:"Buddy Standard Limit","Buddy Moderate Limit","Buddy High Limit", "Buddy Super Limit"),
+        "How many fuck buddies can you have?<li>Standard - 5</li><li>Moderate - 10</li><li>High - 25</li><li>Super - 999</li>")
+    (set: $BL_count to (cond: $BL_option is "Buddy Standard Limit", 5, $BL_option is "Buddy Moderate Limit", 10, $BL_option is "Buddy High Limit", 25, $BL_option is "Buddy Super Limit", 999, 999))
+}
+:: Init Buddies Limit [initialize init_new]
+{
+	(if:$BL_option is 0)[
+		(set:$BL_option to "Buddy Standard Limit")(set:$BL_count to 5)
+	]
+}
+:: sex transactional end
+{
+<div class="sex_location_pic">
+(media:$location_params's "sex location pic")
+</div>
+(set:$ambience to $location_params's "ambience")
+(set:$social_timer to 0)
+(if:$scene's "events" contains "oral")[
+    (set:$stats's "cunnilingus received" to it + 1)
+]
+
+(unless:(checkdm:$npc,"id","is","bruce"))[
+    (set:$case to "upper")
+    (display:"npc pronoun") (twirl:"zips up his pants","pulls his pants back on","zips back up"). ]
+(if:$scene_type is "sex bedroom")[
+    (if:(checkdm:$npc,"id","is","bruce"))[
+        (display:"transactional bedroom sex end bruce")
+    ](else:)[
+        (display:"transactional bedroom sex end")
+    ]
+](else:)[
+    (if:$his_satisfaction < 3 and $reward is "money")[
+        (if:$npc's tags contains "fuckboy" or $npc's tags contains "chad" and (twist:1,2) is 1)[
+            (set:$reward to "none")
+            He explains that your (twirl:"lackluster performance","poor performance") means (twirl:"no cash","he doesn't need to pay you").
+        ](else-if:$npc's tags contains "gentleman")[
+            He says (twirl:"a deal is a deal","he'll still honor the deal").
+        ](else-if:(twist:1,2) is 1)[
+            He (twirl:"explains","says") that your (twirl:"lackluster performance","sucky blowjob","poor performance") means (twirl:"that you only get half the agreed payment","that you only get half the agreed money","that he can only pay you half").(set:$reward_amount to (ceil:$reward_amount / 2))
+        ]
+    ]
+    (if:(get_npc_satisfaction:) > 6 and $reward is "money" and $npc's wealth > 3 and (twist:1,2) is 1 and not ($npc's tags contains "fuckboy"))[
+        (inc:'reward_amount',40)
+        (twirl:"He even offers you a $40 *tip* since he loved it so much.","He even offers you a $40 tip.")
+    ]
+    (if:$reward is "money")[
+        (nl:2)
+        <div class='options'><mark>
+            He gives you $(print:$reward_amount).
+        </mark></div>
+        ($gain_money:$reward_amount)
+    ]
+    (if:$reward is "card")[
+        (nl:2)
+        <div class='options'><mark>
+            He gives you an X-Change trading card.
+        </mark></div>
+        (nl:2)
+        (if:(get_npc_satisfaction:) <= 3)[
+            (set:$card_select to "common")
+        ]
+        (else-if:(get_npc_satisfaction:) >= 4)[
+            (set:$card_select to (twirl:"common","uncommon","rare"))
+        ]
+        (display:"get card")
+    ]
+    (if:$reward is "office stress relief")[
+        (display:"office sex end scene")
+    ]
+    (if:$reward is "volleyball")[
+        (display:"volleyball sex transactional post scene")
+    ]
+    (if:$reward is "lead")[
+        (if:$office_events contains "swp restriction")[
+            (display:"sex transactional restriction outcomes")
+        ](else:)[
+            (display:"npc lead reward")
+        ]
+    ]
+    (nl:1)
+    (set:$fuckbuddies to (findfuckbuddies:))(if:(get_npc_satisfaction:) > 5 and not ($npc's "tags" contains "fuckbuddy") and not ((checkdm:$npc,"id","is","bruce")))[
+        (if:$fuckbuddies's length > $BL_count)[
+            <div class='options'><mark>You already have $BL_count fuck-buddies!</mark></div>(display:"sex transactional end final")
+        ](else:)[
+            (display:"npc request relationship")
+        ]
+    ](else:)[
+        (display:"sex transactional end final")
+    ]
+]
+}

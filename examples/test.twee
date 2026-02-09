@@ -1,0 +1,6 @@
+:: StoryInit
+<<set $hp to 100>>
+
+:: Start
+This is a test.
+[[Go|Next]]

@@ -1,0 +1,86 @@
+:: StoryInit
+<<set $PLAYER_HP to 100>>
+<<set $HAS_KEY to false>>
+
+
+:: INT_ANCIENT_RUINS_-_NIGHT
+**INT. ANCIENT RUINS - NIGHT**
+
+<script>$("body").css("background-image", "url('ruins_dark_stormy.jpg')");</script>
+
+<!-- Asset: MUSIC tension_loop_v2 -->
+
+The wind howls through the cracked masonry.
+
+<!-- SHOW: Elara, nervous, left -->
+
+**ELARA**: We shouldn't be here.
+
+
+What do you do?
+
+
+What do you do?
+
+[[Kick the door open.|ATTEMPT_FORCE]]
+
+[[Unlock it carefully.|ATTEMPT_KEY]]
+
+
+:: ATTEMPT_FORCE
+
+<<if $PLAYER_HP > 10>>
+<<set $PLAYER_HP -= 5>>
+
+The wood splinters. You are in.
+
+<<goto "SCENE_INTERIOR">>
+
+<<else>>
+You are too weak.
+
+<<goto "SCENE_FAIL">>
+
+<<endif>>
+
+
+:: ATTEMPT_KEY
+
+<<if $HAS_KEY == true>>
+The mechanism clicks. Smooth.
+
+<<goto "SCENE_INTERIOR">>
+
+<<else>>
+It's locked.
+
+<<goto "SCENE_FAIL">>
+
+<<endif>>
+
+
+:: SCENE_INTERIOR
+
+
+**INT. INSIDE RUINS**
+
+<script>$("body").css("background-image", "url('main_hall.jpg')");</script>
+
+You made it inside.
+
+<<goto "END_GAME">>
+
+
+:: SCENE_FAIL
+
+
+**EXT. RUINS ENTRANCE**
+
+You failed to enter.
+
+<<goto "END_GAME">>
+
+
+:: END_GAME
+
+The End.

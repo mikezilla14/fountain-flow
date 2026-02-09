@@ -1,0 +1,53 @@
+$ PLAYER_HP: 100
+$ HAS_KEY: false
+===
+
+INT. ANCIENT RUINS - NIGHT
+! BG: ruins_dark_stormy
+! MUSIC: tension_loop_v2
+
+The wind howls through the cracked masonry.
+
+! SHOW: Elara, nervous, left
+ELARA
+We shouldn't be here.
+
+? What do you do?
+
+? What do you do?
+
++ [Force Door] Kick the door open. -> #ATTEMPT_FORCE
++ [Use Key] Unlock it carefully. -> #ATTEMPT_KEY
+
+# ATTEMPT_FORCE
+(IF: PLAYER_HP > 10)
+    ~ PLAYER_HP -= 5
+    The wood splinters. You are in.
+    -> #SCENE_INTERIOR
+(ELSE)
+    You are too weak.
+    -> #SCENE_FAIL
+(END)
+
+# ATTEMPT_KEY
+(IF: HAS_KEY == true)
+    The mechanism clicks. Smooth.
+    -> #SCENE_INTERIOR
+(ELSE)
+    It's locked.
+    -> #SCENE_FAIL
+(END)
+
+# SCENE_INTERIOR
+INT. INSIDE RUINS
+! BG: main_hall
+You made it inside.
+-> #END_GAME
+
+# SCENE_FAIL
+EXT. RUINS ENTRANCE
+You failed to enter.
+-> #END_GAME
+
+# END_GAME
+The End.
