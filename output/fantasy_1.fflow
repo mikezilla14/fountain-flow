@@ -21,58 +21,58 @@ Tiny RPG Sample (SugarCube)
 
 # Start
 
-$$player 
+<<set $player to {
 
-	$name = "Hero",
+name: "Hero",
 
-	$ maxHP = 20,
+maxHP: 20,
 
-	$hp: 20
+hp: 20,
 
-	$atk = 5
+atk: 5,
 
-	$gold = 0
+gold: 0
 
+}>>
 
+<<set $goblin to {
 
-$$goblin
+name: "Fetral",
 
-	$name = "Fetral"
+maxHP: 10,
 
-	$maxHP = 10
+hp: 10,
 
-	$hp = 10
+atk: 3
 
-	$atk = 3
-
-
+}>>
 
 You wake up in a forest, sword in hand. A goblin blocks the path.
 
-->You look at reflection in the pool of water at your feet->#Player_Status
-->Look at the goblin->#Goblin_Status
++ [You look at reflection in the pool of water at your feet->#Player_Status]
++ [Look at the goblin->#Goblin_Status]
 
 # Player_Status
 
 '''Status'''
 
-Name: $$player.name <br>
+Name: <<= $player.name>><br>
 
-HP: $$player.hp /  $$player.maxHP <br>
+HP: <<= $player.hp>> / <<= $player.maxHP>><br>
 
-ATK: $$player.atk <br>
+ATK: <<= $player.atk>><br>
 
-Gold: $$player.gold <br>
+Gold: <<= $player.gold>><br>
 
-(IF: $$player.hp <= 0)
+(IF: $player.hp <= 0)
 
 -> #Game Over
 
 (ELSE)
 
--> #Fight the goblin->Fight
++ [Fight the goblin->Fight]  -> #Fight the goblin->Fight
 
--> #Rest at the campfire->Rest
++ [Rest at the campfire->Rest]  -> #Rest at the campfire->Rest
 
 (END)
 
@@ -94,11 +94,9 @@ Gold: <<= $goblin.gold>><br>
 
 (ELSE)
 
--> #Fight the goblin->Fight
++ [Fight the goblin->Fight]  -> #Fight the goblin->Fight
 
--> #Rest at the campfire->Rest
-
--> #Look around->Start
++ [Rest at the campfire->Rest]  -> #Rest at the campfire->Rest
 
 (END)
 
@@ -117,7 +115,7 @@ You take a short rest by a flickering campfire.
 
 You feel a bit better. Your HP is now <<= $player.hp>> / <<= $player.maxHP>>.
 
--> #Back to status->Status
++ [Back to status->Status]  -> #Back to status->Status
 
 
 # Fight
@@ -126,11 +124,11 @@ You feel a bit better. Your HP is now <<= $player.hp>> / <<= $player.maxHP>>.
 
 The goblin has already been defeated.
 
-->Back to status->#Player_Status
++ [Back to status->Status]  -> #Back to status->Status
 
 (ELSE)
 
-'''Battle: <<= $goblin.name>>>'''
+'''Battle: <<= $goblin.name>>'''
 
 Your HP: <<= $player.hp>> / <<= $player.maxHP>><br>
 
@@ -138,9 +136,9 @@ Goblin HP: <<= $goblin.hp>> / <<= $goblin.maxHP>><br><br>
 
 What do you do?
 
-->Attack->#Player Attack
++ [Attack->Player Attack]  -> #Attack->Player Attack
 
-->Try to run away->#Run Away
++ [Try to run away->Run Away]  -> #Try to run away->Run Away
 
 (END)
 
@@ -149,11 +147,11 @@ What do you do?
 
 You swing your weapon at the goblin!
 
-$_damage to random(3, $player.atk)
+<<set _damage to random(3, $player.atk)>>
 
-$goblin.hp -= $_damage
+<<set $goblin.hp -= _damage>>
 
-You deal $_damage damage.
+You deal <<= _damage>> damage.
 
 (IF: $goblin.hp <= 0)
 
@@ -161,17 +159,17 @@ You deal $_damage damage.
 
 The goblin collapses!
 
-$_goldGain to random(3,7)>>
+<<set _goldGain to random(3,7)>>
 
-$player.gold += $_goldGain
+<<set $player.gold += _goldGain>>
 
-You loot $_goldGain>> gold. You now have $player.gold gold.
+You loot <<= _goldGain>> gold. You now have <<= $player.gold>> gold.
 
-->Back to status->#Status
++ [Back to status->Status]  -> #Back to status->Status
 
 (ELSE)
 
-->Continue...->#Enemy Attack
++ [Continue...->Enemy Attack]  -> #Continue...->Enemy Attack
 
 (END)
 
@@ -180,20 +178,21 @@ You loot $_goldGain>> gold. You now have $player.gold gold.
 
 The goblin strikes back!
 
-$_damage to random(1, $goblin.atk)>>
+<<set _damage to random(1, $goblin.atk)>>
 
-$player.hp -= $_damage
-It deals $_damage damage.
+<<set $player.hp -= _damage>>
+
+It deals <<= _damage>> damage.
 
 (IF: $player.hp <= 0)
 
 <<set $player.hp = 0>>
 
-->Fall to the ground...->#Game Over
++ [Fall to the ground...->Game Over]  -> #Fall to the ground...->Game Over
 
 (ELSE)
 
-->Back to battle->#Fight
++ [Back to battle->Fight]  -> #Back to battle->Fight
 
 (END)
 
@@ -204,7 +203,7 @@ You turn and flee from the goblin, heart pounding.
 
 You escape, but your pride stings.
 
-->Back to status->#Status
++ [Back to status->Status]  -> #Back to status->Status
 
 
 # Game Over
@@ -213,8 +212,8 @@ You escape, but your pride stings.
 
 Your final stats:<br>
 
-HP: $player.hp / $player.maxHP<br>
+HP: <<= $player.hp>> / <<= $player.maxHP>><br>
 
-Gold: $player.gold<br>
+Gold: <<= $player.gold>><br>
 
-->Play again->#Start
++ [Play again->Start]  -> #Play again->Start
